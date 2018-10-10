@@ -2,6 +2,7 @@ package com.greenfoxacademy.zerothweekproject.controllers;
 
 import com.greenfoxacademy.zerothweekproject.models.Todo;
 import com.greenfoxacademy.zerothweekproject.repositories.TodoRepository;
+import com.greenfoxacademy.zerothweekproject.services.TodoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public class TodoController {
 
     private TodoRepository todoRepository;
+    private TodoService todoService;
 
-    public TodoController(TodoRepository todoRepository) {
+    public TodoController(TodoRepository todoRepository, TodoService todoService) {
         this.todoRepository = todoRepository;
+        this.todoService = todoService;
     }
 
     @GetMapping(value = {"/todo", "/"})
@@ -42,13 +45,13 @@ public class TodoController {
 
     @GetMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
-        todoRepository.deleteById(id);
+        todoService.deleteById(id);
         return "redirect:/todo";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
-        Todo todo = todoRepository.findById(id).get();
+        Todo todo = todoService.findById(id);
         model.addAttribute("id", todo.getId());
         model.addAttribute("title", todo.getTitle());
         model.addAttribute("urgent", todo.isUrgent());
@@ -58,11 +61,7 @@ public class TodoController {
 
     @PostMapping("/{id}/edit")
     public String editPost(@PathVariable Long id, String title, boolean done, boolean urgent) {
-        Todo todo = todoRepository.findById(id).get();
-        todo.setDone(done);
-        todo.setTitle(title);
-        todo.setUrgent(urgent);
-        todoRepository.save(todo);
+        todoService.editPost(id,title,done,urgent);
         return "redirect:/";
     }
 
@@ -73,7 +72,7 @@ public class TodoController {
 
     @PostMapping("/add")
     public String addPost(String title) {
-        todoRepository.save(new Todo(title));
+        todoService.todoSave(title);
         return "redirect:/todo";
     }
 }
