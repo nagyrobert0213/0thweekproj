@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+
+<a class="btn btn-primary" href="/todo">Show all</a>
+<a class="btn btn-primary" href="/todo?isActive=true">Show active ones</a>
+<a class="btn btn-primary" href="/add">Add new task</a>
+
+<form action="/search" method="get">
+    Search by title:<br>
+    <label>
+    </label>
+    <input class="form-control" type="text" name="search" placeholder="Search">
+    <button type="submit"><span class="glyphicon glyphicon-search btn btn-primary btn-block"></span></button>
+</form>
+
+<table class="table">
+    <h1>Task list</h1>
+    <thead class="thead-dark">
+    <tr>
+        <td>ID</td>
+        <td>TITLE</td>
+        <td>DONE</td>
+        <td>URGENT</td>
+
+    </tr>
+    </thead>
+    <th:block th:each="todo : ${todoList}" th:unless="${listActive}">
+        <tbody>
+        <tr>
+            <td th:text="${todo.getId()}"></td>
+            <td th:text="${todo.getTitle()}"></td>
+            <td th:if="${todo.isDone()}"><span class="glyphicon glyphicon-ok"></span></td>
+            <td th:unless="${todo.isDone()}"><span class="glyphicon glyphicon-remove"></span></td>
+            <td th:if="${todo.isUrgent()}"><span class="glyphicon glyphicon-ok"></span></td>
+            <td th:unless="${todo.isUrgent()}"><span class="glyphicon glyphicon-remove"></span></td>
+            <td><a class="btn btn-danger" th:href="@{'/' + ${todo.getId()} + '/delete'}" onclick="return confirm('Are you sure?')">Delete</a></td>
+            <td><a class="btn btn-primary"th:href="@{'/' + ${todo.getId()} + '/edit'}">Edit</a></td>
+        </tr>
+        </tbody>
+    </th:block>
+    <th:block th:each="todo : ${todoList}" th:if="${listActive}" th:unless="${todo.isDone()}">
+        <tr>
+            <td th:text="${todo.getId()}"></td>
+            <td th:text="${todo.getTitle()}"></td>
+            <td th:if="${todo.isDone()}"><span class="glyphicon glyphicon-ok"></span></td>
+            <td th:unless="${todo.isDone()}"><span class="glyphicon glyphicon-remove"></span></td>
+            <td th:if="${todo.isUrgent()}"><span class="glyphicon glyphicon-ok"></span></td>
+            <td th:unless="${todo.isUrgent()}"><span class="glyphicon glyphicon-remove"></span></td>
+            <td><a class="btn btn-danger"  th:href="@{'/' + ${todo.getId()} + '/delete'}" onclick="return confirm('Are you sure?')">Delete</a></td>
+            <td><a class="btn btn-primary" th:href="@{'/' + ${todo.getId()} + '/edit'}">Edit</a></td>
+        </tr>
+</table>
+<script src="webjars/jquery/1.11.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+</body>
+</html>
