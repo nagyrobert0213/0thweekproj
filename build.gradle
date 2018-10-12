@@ -31,9 +31,14 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     compile group: 'org.webjars', name: 'bootstrap', version: '3.3.7-1'
     compile group: 'org.webjars.bower', name: 'jquery', version: '3.2.1'
+    compile('javax.xml.bind:jaxb-api:2.3.0')
+    compile("com.auth0:java-jwt:3.4.0")
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
     runtimeOnly('mysql:mysql-connector-java')
     compileOnly('org.projectlombok:lombok')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.security:spring-security-test')
+
+    compile group: 'com.auth0', name: 'auth0-spring-security-api', version: '1.1.0'
+
 }
